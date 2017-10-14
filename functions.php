@@ -67,3 +67,17 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
  * Note: Do not add any custom code here. Please use a custom plugin so that your customizations aren't lost during updates.
  * https://github.com/woocommerce/theme-customisations
  */
+
+
+add_action( 'woocommerce_after_order_notes', 'my_custom_checkout_field' );
+
+function my_custom_checkout_field( $checkout ) {
+	echo '<div id="my_custom_checkout_field"><h2>' . __('My Field') . '</h2>';
+	woocommerce_form_field( 'my_field_name', array(
+	'type'          => 'text',
+	'class'         => array('my-field-class form-row-wide'),
+	'label'         => __('Fill in this field'),
+	'placeholder'   => __('Enter something'),
+	), $checkout->get_value( 'my_field_name' ));
+	echo '</div>';
+}
