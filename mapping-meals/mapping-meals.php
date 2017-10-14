@@ -8,8 +8,8 @@ class GourmetMealMapping {
   }
 
   function admin_init() {
-  	add_meta_box( 'gourmet_order_meta_box', 'Meal Ordered', array( $this, 'order_meta_box' ), 'shop_order', 'main', 'high' );
-    $this->create_table();
+  	add_meta_box( 'gourmet_order_meta_box', 'Meal Ordered', array( $this, 'order_meta_box' ), 'shop_order', 'side', 'high' );
+    //$this->create_table();
   }
 
   function create_table() {
