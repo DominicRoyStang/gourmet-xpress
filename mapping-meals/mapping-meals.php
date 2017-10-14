@@ -5,10 +5,24 @@ class GourmetMealMapping {
 
   function __construct() {
     add_action( 'admin_init', array( $this, 'admin_init' ) );
-	}
+  }
 
   function admin_init() {
   	add_meta_box( 'gourmet_order_meta_box', 'Meal Ordered', array( $this, 'order_meta_box' ), 'shop_order', 'main', 'high' );
+    $this->create_table();
+  }
+
+  function create_table() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE `gourmet_mapping` (
+      `user_id` int(11) NOT NULL,
+      `product_id` int(11) NOT NULL,
+      `meal_id` int(11) NOT NULL,
+      `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )";
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
   }
 
 // add table
