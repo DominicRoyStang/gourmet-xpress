@@ -100,6 +100,8 @@ function wps_select_checkout_field_display_admin_order_meta($order){
 	echo '<p><strong>'.__('Date').':</strong> ' . get_post_meta( $order->get_id(), 'order_date', true ) . '</p>';
 }
 
+require 'mapping-meals/mapping-meals.php';
+
 // Product variation workaround (== ugly hack) to allow dates on prods
 // add_filter( 'woocommerce_variation_option_name', 'woocommerce_variation_option_name_cmj', 10, 1 );
 // function woocommerce_variation_option_name_cmj( $_val ) {
