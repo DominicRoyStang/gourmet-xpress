@@ -49,7 +49,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<li class="woocommerce-order-overview__date date">
 					<?php _e( 'Date:', 'woocommerce' ); ?>
-					<strong><?php echo wc_format_datetime( $order->get_date_created() ); ?></strong>
+					<strong><?php
+					echo get_post_meta( $order->get_id(), 'order_date', true );
+					//echo wc_format_datetime( $order->get_date_created() ); ?></strong>
 				</li>
 
 				<?php if ( is_user_logged_in() && $order->get_user_id() === get_current_user_id() && $order->get_billing_email() ) : ?>
