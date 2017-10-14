@@ -149,6 +149,12 @@ if ( ! function_exists( 'storefront_sorting_wrapper' ) ) {
 	 */
 	function storefront_sorting_wrapper() {
 		echo '<div class="storefront-sorting">';
+		// Hiding the sorting
+		?>
+		<style type="text/css">.storefront-sorting{
+		display:none;
+		}</style>
+		<?php
 	}
 }
 
