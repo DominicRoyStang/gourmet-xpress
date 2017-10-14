@@ -1,0 +1,39 @@
+General Workflow with Git:
+
+FIRST TIME USE:
+    
+    1. Get added to the repository 
+        Send your GitHub username on slack
+    
+    2. Clone the repository
+        git clone https://github.com/<YourGithubUsername>/gourmet-xpress.git
+
+    3. Locally store the remote repository as 'origin' (might be done automatically as you clone)
+        git remote add origin https://github.com/<YourGithubUsername>/gourmet-xpress.git
+    
+
+GENERAL WORKFLOW:
+
+    1. Get a task assigned to you
+    
+    2. Create a local branch for your task
+        git checkout -b "<branch-name>"
+
+    3. Push the branch to the remote repository
+        git push -u origin "<branch-name>"
+    
+    4. Start writing code
+
+    5. Look at the list your changed files
+        git status
+    
+    6. Add all changed files and commit them locally
+        git add .
+        git commit -m "<description of changes>"
+    
+    7. Push your changes to the remote repository
+        git push
+    
+    8. Repeat steps 4-7 as needed
+
+    9. When your code is ready to be used by others, create a pull request on Github
