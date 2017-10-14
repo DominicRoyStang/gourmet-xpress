@@ -68,16 +68,39 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
  * https://github.com/woocommerce/theme-customisations
  */
 
-
+// Gourmet Xpress mods
+// Add date option to order
 add_action( 'woocommerce_after_order_notes', 'my_custom_checkout_field' );
 
 function my_custom_checkout_field( $checkout ) {
-	echo '<div id="my_custom_checkout_field"><h2>' . __('My Field') . '</h2>';
-	woocommerce_form_field( 'my_field_name', array(
-	'type'          => 'text',
-	'class'         => array('my-field-class form-row-wide'),
-	'label'         => __('Fill in this field'),
-	'placeholder'   => __('Enter something'),
-	), $checkout->get_value( 'my_field_name' ));
+	echo '<div id="my_order_date"><h2>' . __('Order Date') . '</h2>';
+	$_args = array(
+		'type'          => 'select',
+		'class'         => array('my-field-class form-row-wide'),
+		'label'         => __('Date'),
+		'placeholder'   => __('Enter date'),
+		'options'				=> array(),
+	);
+	$_time = time();
+	$_day = 3600 * 24;
+	for ( $x = 0; $x < 10; $x ++ ) {
+		$_date = date( 'D M d', $_time + $x * $_day);
+		$_args['options'][ $_date ] = $_date;
+	}
+	woocommerce_form_field( 'order_date', $_args, $checkout->get_value( 'my_field_name' ));
 	echo '</div>';
 }
+
+// Product variation workaround (== ugly hack) to allow dates on prods
+// add_filter( 'woocommerce_variation_option_name', 'woocommerce_variation_option_name_cmj', 10, 1 );
+// function woocommerce_variation_option_name_cmj( $_val ) {
+// 	if ( ( '0' === $_val ) || ( 0 < intval( $_val ) ) ) {
+// 		$_time = time();
+// 		$_day = 3600 * 24;
+// 		$_val = intval( $_val );
+// 		$_date = date( 'D M d', $_time + $_val * $_day);
+// 		return $_date;
+// 	} else {
+// 		return $_val;
+// 	}
+// }
