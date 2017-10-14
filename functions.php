@@ -73,7 +73,7 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
 add_action( 'woocommerce_after_order_notes', 'my_custom_checkout_field' );
 
 function my_custom_checkout_field( $checkout ) {
-	echo '<div id="my_order_date"><h2>' . __('Order Date') . '</h2>';
+	echo '<div id="order_date"><h2>' . __('Order Date') . '</h2>';
 	$_args = array(
 		'type'          => 'select',
 		'class'         => array('my-field-class form-row-wide'),
@@ -87,8 +87,17 @@ function my_custom_checkout_field( $checkout ) {
 		$_date = date( 'D M d', $_time + $x * $_day);
 		$_args['options'][ $_date ] = $_date;
 	}
-	woocommerce_form_field( 'order_date', $_args, $checkout->get_value( 'my_field_name' ));
+	woocommerce_form_field( 'order_date', $_args, $checkout->get_value( 'order_date' ));
 	echo '</div>';
+}
+add_action('woocommerce_checkout_update_order_meta', 'wps_select_checkout_field_update_order_meta');
+ function wps_select_checkout_field_update_order_meta( $order_id ) {
+   if ($_POST['order_date']) update_post_meta( $order_id, 'order_date', esc_attr($_POST['order_date']));
+ }
+
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'wps_select_checkout_field_display_admin_order_meta', 10, 1 );
+function wps_select_checkout_field_display_admin_order_meta($order){
+	echo '<p><strong>'.__('Date').':</strong> ' . get_post_meta( $order->get_id(), 'order_date', true ) . '</p>';
 }
 
 // Product variation workaround (== ugly hack) to allow dates on prods
