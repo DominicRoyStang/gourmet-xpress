@@ -6,6 +6,13 @@
 * db work is messy and not very secure
 * UI is rough
 * to install run $this->create_table();
+* Next Steps:
+* - Add e-commerce
+* - Different meal pricing by client or role
+* - Report that groups orders by date and meal for kitchen whiteboard
+* - Settings page for hard-coded meal IDs
+* - move this code to plugin
+* - create db table ($this->create_table) on plugin registration 
 */
 
 $gourmet_meal_mapping = new GourmetMealMapping();
