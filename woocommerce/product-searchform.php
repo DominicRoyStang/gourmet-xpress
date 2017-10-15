@@ -20,6 +20,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Hiding the header bar search
+?>
+<style type="text/css">#woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>{
+display:none;
+}</style>
+<style type="text/css">.site-search{
+display:none;
+}</style>
+<?php
+
 ?>
 <form role="search" method="get" class="woocommerce-product-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 	<label class="screen-reader-text" for="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>"><?php _e( 'Search for:', 'woocommerce' ); ?></label>
