@@ -72,8 +72,15 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
 require 'mapping-meals/mapping-meals.php';
 
 // adding price filter
-add_filter( 'woocommerce_get_price_html', 'wpa83367_price_html', 100, 2 );
-function wpa83367_price_html( $price,$product ){
-    $price = '';
-    return $price;
+add_filter( 'woocommerce_get_price_html', 'blank_out_price', 100, 2 );
+function blank_out_price( $price = 0, $product = null ) {
+	return '';
+}
+
+add_filter( 'woocommerce_cart_item_price', 'set_na_price', 100, 2 );
+add_filter( 'woocommerce_cart_item_subtotal', 'set_na_price', 100, 2 );
+add_filter( 'woocommerce_cart_subtotal', 'set_na_price', 100, 2 );
+add_filter( 'woocommerce_cart_totals_order_total_html', 'set_na_price', 100, 2 );
+function set_na_price( $price = 0, $product = null ) {
+	return 'N/A';
 }
