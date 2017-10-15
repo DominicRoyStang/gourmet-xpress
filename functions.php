@@ -68,50 +68,5 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
  * https://github.com/woocommerce/theme-customisations
  */
 
-// Gourmet Xpress mods
-// Add date option to order
-add_action( 'woocommerce_after_order_notes', 'my_custom_checkout_field' );
-
-function my_custom_checkout_field( $checkout ) {
-	echo '<div id="order_date"><h2>' . __('Order Date') . '</h2>';
-	$_args = array(
-		'type'          => 'select',
-		'class'         => array('my-field-class form-row-wide'),
-		'label'         => __('Date'),
-		'placeholder'   => __('Enter date'),
-		'options'				=> array(),
-	);
-	$_time = time();
-	$_day = 3600 * 24;
-	for ( $x = 0; $x < 10; $x ++ ) {
-		$_date = date( 'D M d', $_time + $x * $_day);
-		$_args['options'][ $_date ] = $_date;
-	}
-	woocommerce_form_field( 'order_date', $_args, $checkout->get_value( 'order_date' ));
-	echo '</div>';
-}
-add_action('woocommerce_checkout_update_order_meta', 'wps_select_checkout_field_update_order_meta');
- function wps_select_checkout_field_update_order_meta( $order_id ) {
-   if ($_POST['order_date']) update_post_meta( $order_id, 'order_date', esc_attr($_POST['order_date']));
- }
-
-add_action( 'woocommerce_admin_order_data_after_billing_address', 'wps_select_checkout_field_display_admin_order_meta', 10, 1 );
-function wps_select_checkout_field_display_admin_order_meta($order){
-	echo '<p><strong>'.__('Date').':</strong> ' . get_post_meta( $order->get_id(), 'order_date', true ) . '</p>';
-}
-
+// Adding custom code cause it's a hackathon - should be a plugin
 require 'mapping-meals/mapping-meals.php';
-
-// Product variation workaround (== ugly hack) to allow dates on prods
-// add_filter( 'woocommerce_variation_option_name', 'woocommerce_variation_option_name_cmj', 10, 1 );
-// function woocommerce_variation_option_name_cmj( $_val ) {
-// 	if ( ( '0' === $_val ) || ( 0 < intval( $_val ) ) ) {
-// 		$_time = time();
-// 		$_day = 3600 * 24;
-// 		$_val = intval( $_val );
-// 		$_date = date( 'D M d', $_time + $_val * $_day);
-// 		return $_date;
-// 	} else {
-// 		return $_val;
-// 	}
-// }

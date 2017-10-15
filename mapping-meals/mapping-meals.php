@@ -1,10 +1,12 @@
 <?php
 /*
-/* Should be a separate plugin
+* Event: Random Hacks of Kindness, Ottawa 2017
+* Should be a separate plugin
 * some ugly hacks but it's a hackathon
 * db work is messy and not very secure
 * UI is rough
 */
+
 $gourmet_meal_mapping = new GourmetMealMapping();
 
 class GourmetMealMapping {
@@ -16,11 +18,43 @@ class GourmetMealMapping {
 
   function init() {
     add_action( 'admin_menu', array( $this, 'create_menu' ) );
+    add_action( 'woocommerce_after_order_notes', array( $this, 'add_field_order_date' ) );
+    add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_order_date' ) );
+    add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_show_order_date' ), 10, 1 );
   }
 
   function admin_init() {
   	add_meta_box( 'gourmet_order_meta_box', 'Meal Ordered', array( $this, 'order_meta_box' ), 'shop_order', 'side', 'high' );
     //$this->create_table();
+  }
+
+  function add_field_order_date( $checkout ) {
+  	echo '<div id="order_date"><h2>' . __( 'Order Date' ) . '</h2>';
+  	$_args = array(
+  		'type'          => 'select',
+  		'class'         => array( 'my-field-class form-row-wide' ),
+  		'label'         => __( 'Date'),
+  		'placeholder'   => __( 'Enter date' ),
+  		'options'				=> array(),
+  	);
+  	$_time = time();
+  	$_day = 3600 * 24;
+  	for ( $x = 0; $x < 10; $x ++ ) {
+  		$_date = date( 'D M d', $_time + $x * $_day);
+  		$_args['options'][ $_date ] = $_date;
+  	}
+  	woocommerce_form_field( 'order_date', $_args, $checkout->get_value( 'order_date' ) );
+  	echo '</div>';
+  }
+
+  function save_order_date( $order_id ) {
+    if ( $_POST['order_date'] ) {
+      update_post_meta( $order_id, 'order_date', esc_attr( $_POST['order_date'] ) );
+    }
+  }
+
+  function admin_show_order_date($order){
+    echo '<p><strong>' . __( 'Date' ) . ':</strong> ' . get_post_meta( $order->get_id(), 'order_date', true ) . '</p>';
   }
 
   function create_menu() {
@@ -145,21 +179,6 @@ class GourmetMealMapping {
     return $clients;
   }
 
-  function create_table() {
-    global $wpdb;
-    $charset_collate = $wpdb->get_charset_collate();
-    $sql = "CREATE TABLE `gourmet_mapping` (
-      `user_id` int(11) NOT NULL,
-      `product_id` int(11) NOT NULL,
-      `meal_id` int(11) NOT NULL,
-      `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )";
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta( $sql );
-  }
-
-// add table
-
   function order_meta_box() {
     global $post;
     $order_id = $post->ID;
@@ -226,6 +245,19 @@ class GourmetMealMapping {
     $order = new WC_Order( $order_id );
     $items = $order->get_items();
     return $items;
+  }
+
+  function create_table() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE `gourmet_mapping` (
+      `user_id` int(11) NOT NULL,
+      `product_id` int(11) NOT NULL,
+      `meal_id` int(11) NOT NULL,
+      `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )";
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
   }
 
   function seed_database() {
@@ -301,5 +333,19 @@ class GourmetMealMapping {
 
   }
 
-
 }
+
+
+// Product variation workaround (== ugly hack) to allow dates on prods
+// add_filter( 'woocommerce_variation_option_name', 'woocommerce_variation_option_name_cmj', 10, 1 );
+// function woocommerce_variation_option_name_cmj( $_val ) {
+// 	if ( ( '0' === $_val ) || ( 0 < intval( $_val ) ) ) {
+// 		$_time = time();
+// 		$_day = 3600 * 24;
+// 		$_val = intval( $_val );
+// 		$_date = date( 'D M d', $_time + $_val * $_day);
+// 		return $_date;
+// 	} else {
+// 		return $_val;
+// 	}
+// }
