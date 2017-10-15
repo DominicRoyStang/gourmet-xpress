@@ -104,9 +104,24 @@ class GourmetMealMapping {
     }
   }
 
+  function get_saved_meals( $client_id ) {
+    global $wpdb;
+    $sql = "SELECT * FROM gourmet_mapping "
+      . " WHERE user_id = " . intval( $client_id );
+    $meals = $wpdb->get_results( $sql );
+    $saved_meals = array();
+    foreach ( $meals as $meal ) {
+      $saved_meals[ $meal->product_id ][ $meal->order_date ] = $meal->meal_id;
+    }
+    return $saved_meals;
+  }
+
   function list_date_lines( $client_id ) {
     $this->save_meals( $client_id );
+    $saved_meals = $this->get_saved_meals( $client_id );
     $meals = $this->get_meals();
+    $client = get_userdata( $client_id );
+    echo '<h2>Client: ' . ( isset( $client->display_name ) ? esc_html( $client->display_name ) : 'N/A' ) . '</h2>';
     echo '<form method="POST" action="/wp-admin/admin.php?page=meal-calendar&cid=2&mo=1">' . "\n";
     echo '<input type="hidden" name="submitted" value="1" >';
     // echo '<input type="hidden" name="cid" value="' . $client_id . '" >';
@@ -115,9 +130,9 @@ class GourmetMealMapping {
     //wp_nonce_field( PM_LAYOUT_URI, 'pm_layout_noncename' );
     echo '<table>' . "\n";
     echo '<tr>' . "\n";
-    echo '<td>Date</td>' . "\n";
-    echo '<td>Lunch</td>' . "\n";
-    echo '<td>Dinner</td>' . "\n";
+    echo '<td><b>Date</b></td>' . "\n";
+    echo '<td><b>Lunch</b></td>' . "\n";
+    echo '<td><b>Dinner</b></td>' . "\n";
     echo '</tr>' . "\n";
     $start = time();
     // Hack: hardcoded product ids for lunch and dinner products - move to Settings or pull dynamically and loop from prods that qualify (to include breakfast, etc)
@@ -130,8 +145,8 @@ class GourmetMealMapping {
       $date = date( 'M d', $day );
       echo '<tr>' . "\n";
       echo '<td>' . $date . '</td>' . "\n";
-      echo '<td>' . $this->drop_meals( $meals, $lunch, $x ) . '</td>' . "\n";
-      echo '<td>' . $this->drop_meals( $meals, $dinner, $x ) . '</td>' . "\n";
+      echo '<td>' . $this->drop_meals( $meals, $saved_meals, $lunch, $x ) . '</td>' . "\n";
+      echo '<td>' . $this->drop_meals( $meals, $saved_meals, $dinner, $x ) . '</td>' . "\n";
       echo '</tr>' . "\n";
     }
     echo '</table>' . "\n";
@@ -139,12 +154,18 @@ class GourmetMealMapping {
     echo '</form>' . "\n";
   }
 
-  function drop_meals( $meals, $product_id, $count ) {
+  function drop_meals( $meals, $saved_meals, $product_id, $count ) {
+    $day = time() + ( 60 * 60 * 24 * $count );
+    $order_date = date( 'Y-m-d 00:00:00', $day );
+    $meal_id = 0;
+    if ( isset( $saved_meals[ $product_id ][ $order_date ] ) ) {
+      $meal_id = intval( $saved_meals[ $product_id ][ $order_date ] );
+    }
     $_output = '';
     $_output .= '<select name="meal_' . $count . '_' . $product_id . '" id="">';
     $_output .= '<option value="0">-- None --</option>' . "\n";
     foreach ( $meals as $meal ) {
-      $_output .= '<option value="' . $meal->ID . '">' . $meal->post_title . '</option>' . "\n";
+      $_output .= '<option value="' . $meal->ID . '"' . ( $meal_id === $meal->ID ? ' selected="selected"' : '' ) . '>' . $meal->post_title . '</option>' . "\n";
     }
     $_output .= '</select>';
     return $_output;
