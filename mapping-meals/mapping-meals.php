@@ -90,6 +90,12 @@ class GourmetMealMapping {
   */
   function meal_calendar() {
     $client_id = isset( $_REQUEST['cid'] ) ? intval( $_REQUEST['cid'] ) : 0;
+    // oh such a hack but we demo soon
+    $saved_client_id = isset( $_POST['client_id'] ) ? intval( $_POST['client_id'] ) : 0;
+    if ( 0 < $saved_client_id ) {
+      $this->save_meals( $saved_client_id );
+      $client_id = 0;
+    }
     if ( 0 === $client_id ) {
       // list clients in the first screen so staff can select one to set meals for
       $this->list_clients();
@@ -147,17 +153,16 @@ class GourmetMealMapping {
   * Iterate through 5 weeks of days and display date and product drop menus for lunch and dinner
   */
   function list_date_lines( $client_id ) {
-    $this->save_meals( $client_id );
     $saved_meals = $this->get_saved_meals( $client_id );
     $meals = $this->get_meals();
     $client = get_userdata( $client_id );
     echo '<h2>Client: ' . ( isset( $client->display_name ) ? esc_html( $client->display_name ) : 'N/A' ) . '</h2>';
-    echo '<form method="POST" action="/wp-admin/admin.php?page=meal-calendar&cid=2&mo=1">' . "\n";
+    //echo '<form method="POST" action="/wp-admin/admin.php?page=meal-calendar&cid=2">' . "\n";
+    echo '<form method="POST" action="/wp-admin/admin.php?page=meal-calendar&cid=2">' . "\n";
     echo '<input type="hidden" name="submitted" value="1" >';
-    // echo '<input type="hidden" name="cid" value="' . $client_id . '" >';
-    // echo '<input type="hidden" name="mo" value="' . $month . '" >';
-    // echo '<input type="hidden" name="page" value="meal-calendar">' . "\n";
-    //wp_nonce_field( PM_LAYOUT_URI, 'pm_layout_noncename' );
+    echo '<input type="hidden" name="client_id" value="' . $client_id . '" >';
+    //echo '<input type="hidden" name="page" value="meal-calendar">' . "\n";
+    //wp_nonce_field( GX_SOME_CONSTANT, 'gx_mapping_noncename' );
     echo '<table>' . "\n";
     echo '<tr>' . "\n";
     echo '<td><b>Date</b></td>' . "\n";
