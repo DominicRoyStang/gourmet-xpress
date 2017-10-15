@@ -84,3 +84,17 @@ add_filter( 'woocommerce_cart_totals_order_total_html', 'set_na_price', 100, 2 )
 function set_na_price( $price = 0, $product = null ) {
 	return 'N/A';
 }
+
+
+add_filter('woocommerce_checkout_fields','disable_billing_shipping');
+function disable_billing_shipping($fields){
+	unset($fields['billing']['billing_company']);
+	unset($fields['billing']['billing_address_1']);
+	unset($fields['billing']['billing_address_2']);
+	unset($fields['billing']['billing_city']);
+	unset($fields['billing']['billing_postcode']);
+	unset($fields['billing']['billing_country']);
+	unset($fields['billing']['billing_state']);
+	unset($fields['billing']['billing_phone']);
+	return $fields;
+}
