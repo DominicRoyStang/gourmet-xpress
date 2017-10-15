@@ -1,4 +1,10 @@
 <?php
+/*
+/* Should be a separate plugin
+* some ugly hacks but it's a hackathon
+* db work is messy and not very secure
+* UI is rough
+*/
 $gourmet_meal_mapping = new GourmetMealMapping();
 
 class GourmetMealMapping {
@@ -17,79 +23,6 @@ class GourmetMealMapping {
     //$this->create_table();
   }
 
-  function seed_database() {
-    global $wpdb;
-    $sql = "DELETE FROM gourmet_mapping ";
-    $wpdb->query( $sql );
-    $lunch = 19;
-    $dinner = 33;
-    $client_id = 1;
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
-    $client_id = 2;
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
-    $client_id = 3;
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
-    $client_id = 4;
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
-    $client_id = 5;
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
-    $client_id = 6;
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
-    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
-    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
-  }
-
-  function seed_db_row( $client_id, $product_id, $meal_id, $date ) {
-    global $wpdb;
-    $time = strtotime( $date );
-    $order_date = date( 'Y-m-d 00:00:00', $time );
-    $sql = 'INSERT INTO gourmet_mapping ( user_id, product_id, meal_id, order_date )
-      VALUES ( ' . $client_id . ', ' . $product_id . ', ' . $meal_id . ', "' . $order_date . '" ) ';
-    // echo $sql;
-    $wpdb->query( $sql );
-
-  }
-
   function create_menu() {
     add_submenu_page(
       'woocommerce',
@@ -104,56 +37,83 @@ class GourmetMealMapping {
   function meal_calendar() {
     $client_id = isset( $_REQUEST['cid'] ) ? intval( $_REQUEST['cid'] ) : 0;
     if ( 0 === $client_id ) {
-      $this->seed_database();
+      //$this->seed_database();
       $this->list_clients();
     } else {
       $this->list_date_lines( $client_id );
     }
   }
 
-  function list_date_lines( $client_id ) {
-    if ( isset( $_POST['meal_1'] ) )  {
+  function save_meals( $client_id ) {
+    global $wpdb;
+    if ( isset( $_POST['submitted'] ) )  {
+      $sql = "DELETE FROM gourmet_mapping WHERE user_id = " . intval( $client_id );
+      $wpdb->query( $sql );
+      $start = time();
       foreach( $_POST as $key => $val ) {
-        $day = str_replace( 'meal_', '', $key );
-        $date = '';
-        // need this for lunch and dinner
-        $sql = "INSERT INTO gourmet_mapping ( user_id, product_id, meal_id, order_date )
-          VALUES ( ' . $client_id . ', ' . intval( $val ) . ', ' . intval( $val ) . ', ' . $date . ' ) ";
-        echo $day . ' .. ' . $val . ', ';
+        // Hack: there's a better, more WP-compliant way to do this but running out of time at hackathon so cutting corners
+        if ( false !== strpos( $key, 'meal_' ) ) {
+          $meal_id = intval( $val );
+          if ( 0 < $meal_id ) {
+            $keys = str_replace( 'meal_', '', $key );
+            $args = explode( '_', $keys );
+            $day = $start + ( 60 * 60 * 24 * intval( $args[0] ) );
+            $order_date = date( 'Y-m-d 00:00:00', $day );
+            $product_id = intval( $args[1] );
+            // need this for lunch and dinner
+            $sql = "INSERT INTO gourmet_mapping ( user_id, product_id, meal_id, order_date )
+              VALUES ( " . intval( $client_id ) . ", " . intval( $product_id ) . ", " . intval( $meal_id ) . ", '" . $order_date . "' ) ";
+            $wpdb->query( $sql );
+          }
+        }
       }
     }
-    $month = isset( $_REQUEST['mo'] ) ? intval( $_REQUEST['mo'] ) : 0;
-    $mo_now = date( 'M' );
-    if ( 1 === $month ) {
-      $mo_next = strtotime( $mo_now . ' 1, ' . date( 'Y' ) ) + 3600*24*45;
-      $mo_now = date( 'M', $mo_next );
-    }
+  }
+
+  function list_date_lines( $client_id ) {
+    $this->save_meals( $client_id );
     $meals = $this->get_meals();
     echo '<form method="POST" action="/wp-admin/admin.php?page=meal-calendar&cid=2&mo=1">' . "\n";
+    echo '<input type="hidden" name="submitted" value="1" >';
     // echo '<input type="hidden" name="cid" value="' . $client_id . '" >';
     // echo '<input type="hidden" name="mo" value="' . $month . '" >';
     // echo '<input type="hidden" name="page" value="meal-calendar">' . "\n";
     //wp_nonce_field( PM_LAYOUT_URI, 'pm_layout_noncename' );
     echo '<table>' . "\n";
-    for ( $x = 1; $x <= 31; $x ++ ) {
-      $day = strtotime( $mo_now . ' ' . $x . ', ' . date( 'Y' ) );//date( 'M d' );
+    echo '<tr>' . "\n";
+    echo '<td>Date</td>' . "\n";
+    echo '<td>Lunch</td>' . "\n";
+    echo '<td>Dinner</td>' . "\n";
+    echo '</tr>' . "\n";
+    $start = time();
+    // Hack: hardcoded product ids for lunch and dinner products - move to Settings or pull dynamically and loop from prods that qualify (to include breakfast, etc)
+    $lunch = 19;
+    $dinner = 33;
+    // loop thru next 5 weeks & display meals that can be served to this client
+    // Hack: should get any meals already saved from previous use of this form and populate, but it's a hackathon and we've run out of time
+    for ( $x = 0; $x < 35; $x ++ ) {
+      $day = $start + ( 60 * 60 * 24 * $x );
       $date = date( 'M d', $day );
-      $mo = date( 'M', $day );
-      if ( $mo !== $mo_now ) {
-        break;
-      }
       echo '<tr>' . "\n";
       echo '<td>' . $date . '</td>' . "\n";
-      echo '<td><select name="meal_' . $x . '" id="">';
-      foreach ( $meals as $meal ) {
-        echo '<option value="' . $meal->ID . '">' . $meal->post_title . '</option>' . "\n";
-      }
-      echo '</select></td>' . "\n";
+      echo '<td>' . $this->drop_meals( $meals, $lunch, $x ) . '</td>' . "\n";
+      echo '<td>' . $this->drop_meals( $meals, $dinner, $x ) . '</td>' . "\n";
       echo '</tr>' . "\n";
     }
     echo '</table>' . "\n";
     echo '<input type="submit" value="Search" class="button button-primary">' . "\n";
     echo '</form>' . "\n";
+  }
+
+  function drop_meals( $meals, $product_id, $count ) {
+    $_output = '';
+    $_output .= '<select name="meal_' . $count . '_' . $product_id . '" id="">';
+    $_output .= '<option value="0">-- None --</option>' . "\n";
+    foreach ( $meals as $meal ) {
+      $_output .= '<option value="' . $meal->ID . '">' . $meal->post_title . '</option>' . "\n";
+    }
+    $_output .= '</select>';
+    return $_output;
   }
 
   function get_meals() {
@@ -172,8 +132,8 @@ class GourmetMealMapping {
     foreach ( $clients as $client ) {
       echo '<tr>' . "\n";
       echo '<td>' . $client->display_name . '</td>' . "\n";
-      echo '<td><a href="/wp-admin/admin.php?page=meal-calendar&cid=' . $client->ID . '&mo=0">This Month</a></td>' . "\n";
-      echo '<td><a href="/wp-admin/admin.php?page=meal-calendar&cid=' . $client->ID . '&mo=1">Next Month</a></td>' . "\n";
+      echo '<td><a href="/wp-admin/admin.php?page=meal-calendar&cid=' . $client->ID . '">Menus</a></td>' . "\n";
+      //echo '<td><a href="/wp-admin/admin.php?page=meal-calendar&cid=' . $client->ID . '&mo=1">Next Month</a></td>' . "\n";
       echo '</tr>' . "\n";
     }
     echo '</table>' . "\n";
@@ -267,4 +227,79 @@ class GourmetMealMapping {
     $items = $order->get_items();
     return $items;
   }
+
+  function seed_database() {
+    global $wpdb;
+    $sql = "DELETE FROM gourmet_mapping ";
+    $wpdb->query( $sql );
+    $lunch = 19;
+    $dinner = 33;
+    $client_id = 1;
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
+    $client_id = 2;
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
+    $client_id = 3;
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 98, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
+    $client_id = 4;
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 98, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
+    $client_id = 5;
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
+    $client_id = 6;
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 14, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 15, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 16, 2017' );
+    $this->seed_db_row( $client_id, $lunch, 66, 'Oct 17, 2017' );
+    $this->seed_db_row( $client_id, $dinner, 66, 'Oct 17, 2017' );
+  }
+
+  function seed_db_row( $client_id, $product_id, $meal_id, $date ) {
+    global $wpdb;
+    $time = strtotime( $date );
+    $order_date = date( 'Y-m-d 00:00:00', $time );
+    $sql = "INSERT INTO gourmet_mapping ( user_id, product_id, meal_id, order_date )
+      VALUES ( " . intval( $client_id ) . ", " . intval( $product_id ) . ", " . intval( $meal_id ) . ", '" . $order_date . "' ) ";
+    // echo $sql;
+    $wpdb->query( $sql );
+
+  }
+
+
 }
