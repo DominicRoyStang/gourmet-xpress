@@ -70,3 +70,10 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
 
 // Adding custom code cause it's a hackathon - should be a plugin
 require 'mapping-meals/mapping-meals.php';
+
+// adding price filter
+add_filter( 'woocommerce_get_price_html', 'wpa83367_price_html', 100, 2 );
+function wpa83367_price_html( $price,$product ){
+    $price = '';
+    return $price;
+}
